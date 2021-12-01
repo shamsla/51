@@ -9,7 +9,7 @@ const reducer = (state, { type, data }) => {
             newState.activePage = data
             break
 
-        case CONTEXT.ENCRYPTION_KEYS:
+        case CONTEXT.ENCRYPTION_KEY:
             newState.encryptionKeys = data
             break
 
@@ -22,10 +22,7 @@ const reducer = (state, { type, data }) => {
 
 const initialState = {
     activePage: PAGES.CREDENTIALS,
-    encryptionKeys: {
-        first: null,
-        second: null,
-    },
+    encryptionKey: null,
 }
 
 const actions = dispatch => {
@@ -33,7 +30,7 @@ const actions = dispatch => {
         setActivePage: data => {
             dispatch({ type: CONTEXT.ACTIVE_PAGE, data })
         },
-        setEncryptionKeys: data => {
+        setEncryptionKey: data => {
             dispatch({ type: CONTEXT.ENCRYPTION_KEYS, data })
         },
     }
