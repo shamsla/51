@@ -8,7 +8,7 @@ export default function CustomButton(props) {
             colorScheme="blue"
             size="lg"
             fontSize="17px"
-            style={{ padding: '30px 19px' }}
+            style={{ paddingTop: '30px', paddingBottom: '30px' }}
         >
             {props.children}
         </Button>

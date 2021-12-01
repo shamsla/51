@@ -1,23 +1,43 @@
 import { createContext, useReducer } from 'react'
 import { CONTEXT, PAGES } from 'Constants'
 
-const reducer = (state, { type, data }) => {
-    const newState = { ...state }
-
+const stateMutator = (state, type, data) => {
     switch (type) {
         case CONTEXT.ACTIVE_PAGE:
-            newState.activePage = data
+            state.activePage = data
             break
 
         case CONTEXT.ENCRYPTION_KEY:
-            newState.encryptionKeys = data
+            state.encryptionKey = data
             break
 
         default:
             return state
     }
 
-    return newState
+    return state
+}
+
+const reducer = (state, { type, data }) => {
+    const newState = { ...state }
+
+    if (type === CONTEXT.SET_MULTIPLE) {
+        return data.reduce(
+            (accumulator, current) =>
+                stateMutator(accumulator, current.type, current.data),
+            newState
+        )
+    }
+
+    const mutatedState = stateMutator(newState, type, data)
+    return mutatedState
+}
+
+const dispatchWrapper = dispatch => (payload, options) => {
+    const { shouldDispatch = true } = options || {}
+
+    if (shouldDispatch) dispatch(payload)
+    else return payload
 }
 
 const initialState = {
@@ -27,11 +47,21 @@ const initialState = {
 
 const actions = dispatch => {
     return {
-        setActivePage: data => {
-            dispatch({ type: CONTEXT.ACTIVE_PAGE, data })
-        },
-        setEncryptionKey: data => {
-            dispatch({ type: CONTEXT.ENCRYPTION_KEYS, data })
+        setActivePage: (data, options) =>
+            dispatch({ type: CONTEXT.ACTIVE_PAGE, data }, options),
+
+        setEncryptionKey: (data, options) =>
+            dispatch({ type: CONTEXT.ENCRYPTION_KEY, data }, options),
+
+        setMultiple: multipleActions => {
+            const payload = {
+                type: CONTEXT.SET_MULTIPLE,
+                data: multipleActions.map(({ action, payload }) =>
+                    action(payload, { shouldDispatch: false })
+                ),
+            }
+
+            dispatch(payload)
         },
     }
 }
@@ -45,7 +75,7 @@ export default function ContextProvider({ children }) {
         <AppContext.Provider
             value={{
                 state: state,
-                actions: actions(dispatch),
+                actions: actions(dispatchWrapper(dispatch)),
             }}
         >
             {children}

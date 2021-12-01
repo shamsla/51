@@ -12,8 +12,10 @@ function App() {
             <GlobalStyles />
             <ContextProvider>
                 <Container centerContent>
-                    <Box width="90%" pt={10} textAlign="center" margin="auto">
-                        <Heading mb={20}>Fifty One</Heading>
+                    <Box width="95%" pt={8} textAlign="center" margin="auto">
+                        <Heading cursor="pointer" mb={20} color="gray.200">
+                            Fifty One
+                        </Heading>
                         <PagesMain />
                     </Box>
                 </Container>
