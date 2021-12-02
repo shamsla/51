@@ -1,37 +1,69 @@
-import { Box, IconButton, Spinner, Text } from '@chakra-ui/react'
+import { Box, IconButton, Spinner, Text, useToast } from '@chakra-ui/react'
 import CustomButton from 'Components/Styled/CustomButton'
 import { AppContext } from 'Context'
 import { useContext, useEffect, useState } from 'react'
 import { encryptPassword, generatePassword } from 'Utils/encrytion'
 
+import { copyToClipboard } from 'Utils'
+
+import { Copy, Eye } from 'react-feather'
+import RenderBullets from 'Components/Common/RenderBullets'
+
 export default function CreatePassword() {
-    const [password, setPassword] = useState(null)
-    const [encrypted, setEncrypted] = useState(null)
+    const [password, setPassword] = useState('')
+    const [encrypted, setEncrypted] = useState('')
+
+    const [isPasswordHidden, setPasswordHidden] = useState(true)
+    const [spinnerStatus, setSpinnerStatus] = useState(true)
+
+    const showToast = useToast()
 
     const {
         state: { encryptionKey },
     } = useContext(AppContext)
 
     const populatePasswords = () => {
-        setEncrypted(null)
+        setEncrypted('')
 
         //
         const plainPassword = generatePassword()
         setPassword(plainPassword)
 
         //
-        ;(async () => {
-            const encryptedPassword = await encryptPassword(
-                plainPassword,
-                encryptionKey
-            )
-            setEncrypted(encryptedPassword)
-        })()
+        encryptPassword(plainPassword, encryptionKey).then(result =>
+            setEncrypted(result)
+        )
     }
 
     useEffect(() => populatePasswords(), [])
+    useEffect(() => {
+        const timeout = setTimeout(() => setSpinnerStatus(false), 1000)
+        return () => clearTimeout(timeout)
+    })
 
-    if (!encrypted)
+    const togglePasswordVisibility = () => setPasswordHidden(!isPasswordHidden)
+    const copyPassword = async text => {
+        const isTextCopied = await copyToClipboard(text)
+
+        if (isTextCopied)
+            showToast({
+                position: 'top',
+                title: 'Password Copied',
+                status: 'success',
+                duration: 1500,
+                isClosable: false,
+            })
+        else
+            showToast({
+                position: 'top',
+                title: 'Oops! Unable to copy password.',
+                status: 'error',
+                duration: 1500,
+                isClosable: false,
+            })
+    }
+
+    if (spinnerStatus)
         return (
             <Box
                 height="200px"
@@ -45,14 +77,17 @@ export default function CreatePassword() {
 
     return (
         <Box display="flex" flexDir="column" alignItems="flex-start">
-            <Text fontWeight="medium" color="gray.400" pl="1" mb="3">
+            <Text pl="1" mb="3" fontWeight="medium" color="gray.400">
                 Password
             </Text>
+
             <Box
                 display="flex"
                 width="100%"
                 borderRadius="lg"
                 bg="gray.900"
+                justifyContent="space-between"
+                alignItems="center"
                 padding={4}
                 mb="10"
             >
@@ -64,12 +99,42 @@ export default function CreatePassword() {
                     color="gray.500"
                     fontSize="15px"
                 >
-                    {password}
+                    {isPasswordHidden ? <RenderBullets /> : password}
                 </Text>
+                <Box display="flex" alignItems="center">
+                    <IconButton
+                        onClick={togglePasswordVisibility}
+                        background="none"
+                        size="sm"
+                    >
+                        <Eye width="16px" color="#A0AEC0" />
+                    </IconButton>
+                    <IconButton
+                        onClick={copyPassword.bind(null, password)}
+                        background="none"
+                        size="sm"
+                    >
+                        <Copy color="#A0AEC0" width="16px" />
+                    </IconButton>
+                </Box>
             </Box>
-            <Text fontWeight="medium" color="gray.400" pl="1" mb="3">
-                Encrypted Password
-            </Text>
+
+            <Box mb="3" display="flex" alignItems="flex-end" width="100%">
+                <Text fontWeight="medium" pl="1" color="gray.400">
+                    Encrypted Password
+                </Text>
+                <IconButton
+                    onClick={copyPassword.bind(null, password)}
+                    background="none"
+                    size="sm"
+                    ml="auto"
+                    mr="14px"
+                    style={{ marginBottom: '-6px' }}
+                >
+                    <Copy color="#A0AEC0" width="16px" />
+                </IconButton>
+            </Box>
+
             <Box
                 display="flex"
                 width="100%"

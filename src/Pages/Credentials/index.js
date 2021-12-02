@@ -50,7 +50,7 @@ export default function Credentials() {
                 transform="translateY(-50%)"
             >
                 <Container centerContent>
-                    <Stack width="90%" spacing={4}>
+                    <Stack width="100%" spacing={4}>
                         <FormControl isInvalid={isEncryptionKeyInValid}>
                             <CustomInput
                                 placeholder="Enter Encryption Key"

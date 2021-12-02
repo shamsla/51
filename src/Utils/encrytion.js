@@ -9,7 +9,7 @@ export const validateEncryptionKey = key => {
     return true
 }
 
-export const generatePassword = (length = 15) => {
+export const generatePassword = (length = 16) => {
     return passwordGenerator.generate({
         length,
         numbers: true,

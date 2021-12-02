@@ -1,9 +1,17 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import CreatePassword from 'Components/Pages/Dashboard/CreatePassword'
+import { useState } from 'react'
 
 export default function Dashboard() {
+    const [activeTab, setActiveTab] = useState(0)
+
     return (
-        <Tabs isFitted variant="soft-rounded" colorScheme="blue">
+        <Tabs
+            onChange={index => setActiveTab(index)}
+            isFitted
+            variant="soft-rounded"
+            colorScheme="blue"
+        >
             <TabList mb="4rem">
                 <Tab>Create</Tab>
                 <Tab>Retrieve</Tab>
@@ -11,7 +19,7 @@ export default function Dashboard() {
             </TabList>
             <TabPanels>
                 <TabPanel padding={0}>
-                    <CreatePassword />
+                    {activeTab === 0 && <CreatePassword />}
                 </TabPanel>
                 <TabPanel padding={0}>
                     <p>two!</p>
