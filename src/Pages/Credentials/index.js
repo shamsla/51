@@ -15,7 +15,7 @@ import CustomButton from 'Components/Styled/CustomButton'
 
 export default function Credentials() {
     const [inputs, setInput, setInputsForcefully] = useForm({
-        encryptionKey: 'XswRunJ3hvXcUiPeH8E2wK9eMfjxDI91',
+        encryptionKey: process.env.REACT_APP_DEFAULT_ENCRYPTION_KEY || '',
     })
     const [isEncryptionKeyInValid, setIsEncryptionKeyInValid] = useState(false)
     const {
