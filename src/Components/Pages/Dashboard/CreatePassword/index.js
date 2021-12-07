@@ -77,7 +77,7 @@ export default function CreatePassword() {
 
     return (
         <Box display="flex" flexDir="column" alignItems="flex-start">
-            <Text pl="1" mb="3" fontWeight="medium" color="gray.400">
+            <Text pl="1" mb="3" fontWeight="medium" color="gray.600">
                 Password
             </Text>
 
@@ -85,7 +85,7 @@ export default function CreatePassword() {
                 display="flex"
                 width="100%"
                 borderRadius="lg"
-                bg="gray.900"
+                bg="gray.200"
                 justifyContent="space-between"
                 alignItems="center"
                 padding={4}
@@ -96,7 +96,7 @@ export default function CreatePassword() {
                     style={{ wordWrap: 'break-word' }}
                     textAlign="start"
                     width="100%"
-                    color="gray.500"
+                    color="gray.600"
                     fontSize="15px"
                 >
                     {isPasswordHidden ? <RenderBullets /> : password}
@@ -107,31 +107,31 @@ export default function CreatePassword() {
                         background="none"
                         size="sm"
                     >
-                        <Eye width="16px" color="#A0AEC0" />
+                        <Eye width="16px" color="#4A5568" />
                     </IconButton>
                     <IconButton
                         onClick={copyPassword.bind(null, password)}
                         background="none"
                         size="sm"
                     >
-                        <Copy color="#A0AEC0" width="16px" />
+                        <Copy color="#4A5568" width="16px" />
                     </IconButton>
                 </Box>
             </Box>
 
             <Box mb="3" display="flex" alignItems="flex-end" width="100%">
-                <Text fontWeight="medium" pl="1" color="gray.400">
+                <Text fontWeight="medium" pl="1" color="gray.600">
                     Encrypted Password
                 </Text>
                 <IconButton
-                    onClick={copyPassword.bind(null, password)}
+                    onClick={copyPassword.bind(null, encrypted)}
                     background="none"
                     size="sm"
                     ml="auto"
                     mr="14px"
                     style={{ marginBottom: '-6px' }}
                 >
-                    <Copy color="#A0AEC0" width="16px" />
+                    <Copy color="#4A5568" width="16px" />
                 </IconButton>
             </Box>
 
@@ -139,7 +139,7 @@ export default function CreatePassword() {
                 display="flex"
                 width="100%"
                 borderRadius="lg"
-                bg="gray.900"
+                bg="gray.200"
                 padding={4}
                 mb="10"
             >
@@ -148,7 +148,7 @@ export default function CreatePassword() {
                     style={{ wordWrap: 'break-word' }}
                     textAlign="start"
                     width="100%"
-                    color="gray.500"
+                    color="gray.600"
                     fontSize="15px"
                 >
                     {encrypted}
