@@ -13,6 +13,8 @@ export const generatePassword = (length = 16) => {
     return passwordGenerator.generate({
         length,
         numbers: true,
+        symbols: true,
+        excludeSimilarCharacters: true,
     })
 }
 
